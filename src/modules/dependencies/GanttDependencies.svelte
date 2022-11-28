@@ -3,7 +3,7 @@
 
     import Dependency from './Dependency.svelte';
     
-    import { taskStore } from '../../core/store';
+    import { taskStore, rowStore } from '../../core/store';
 
     const { visibleHeight } = getContext('dimensions');
 
@@ -13,18 +13,23 @@
     let visibleDependencies = [];
     $: {
         const result = [];
-        for (let i = 0; i < dependencies.length; i++) {
-            const dependency = dependencies[i];
-            const map = $taskStore.entities;
+        if(dependencies.length > 0 && $taskStore.ids.length > 0 && $rowStore.ids.length > 0){
+            for (let i = 0; i < dependencies.length; i++) {
+                const dependency = dependencies[i];
+                const map = $taskStore.entities;
+                const mapRow = $rowStore.entities;
 
-            const fromTask = map[dependency.fromId];
-            const toTask = map[dependency.toId];
-            if(
-                fromTask && toTask 
-                && Math.min(fromTask.top, toTask.top) <= paddingTop + $visibleHeight 
-                && Math.max(fromTask.top, toTask.top) >= paddingTop
-            ) {
-                result.push(dependency);
+                const fromTask = map[dependency.fromId];
+                const toTask = map[dependency.toId];
+                const fromRow = fromTask && mapRow[fromTask.model.resourceId];
+                const canShow = fromRow && fromRow.expanded && fromRow.allParents.every(x => x.expanded);
+                if(
+                    fromTask && toTask && canShow
+                    && Math.min(fromTask.top, toTask.top) <= paddingTop + $visibleHeight 
+                    && Math.max(fromTask.top, toTask.top) >= paddingTop
+                ) {
+                    result.push(dependency);
+                }
             }
         }
         visibleDependencies = result;
