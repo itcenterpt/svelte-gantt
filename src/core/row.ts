@@ -53,7 +53,7 @@ export class RowFactory {
             model: row,
             y,
             height,
-            expanded: true
+            expanded: row.expanded
         }
     }
 
@@ -80,6 +80,7 @@ export class RowFactory {
             row.childLevel = level;
             row.parent = parent;
             row.allParents = parents;
+            row.hidden = !parent?.expanded && level > 0;
             
             ctx.y += row.height;
 

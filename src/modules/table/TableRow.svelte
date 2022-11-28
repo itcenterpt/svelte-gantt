@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher, getContext, onMount } from "svelte";
+    import { getContext } from "svelte";
 
     import TableTreeCell from './TableTreeCell.svelte';
     import type { TableHeader } from './tableHeader';
@@ -10,17 +10,6 @@
 
     const { rowHeight } = getContext('options');
     const { hoveredRow, selectedRow } = getContext('gantt');
-
-    const dispatch = createEventDispatcher();
-
-    let treeIndentationStyle = '';
-    $: {
-        treeIndentationStyle = row.parent ? `padding-left: ${row.childLevel*3}em;`:'';
-    }
-
-    onMount(()=>{
-        if(row.model.expanded == false) dispatch('rowCollapsed', { row });
-    })
 
 </script>
 
