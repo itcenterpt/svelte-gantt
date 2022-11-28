@@ -535,7 +535,8 @@
     export function selectTask(id) {
         const task = $taskStore.entities[id];
         if (task) {
-            selectionManager.selectSingle(task);
+            selectionManager.selectSingle(id);
+            api['tasks'].raise.select(task);
         }
     }
 
