@@ -115,7 +115,11 @@
     <div class="sg-table-header" style="height:{$headerHeight}px" bind:this={headerContainer}>
         {#each tableHeaders as header}
             <div class="sg-table-header-cell sg-table-cell" style="width:{header.width}px">
-                {header.title}
+                {#if header.titleRenderer}
+                    {@html header.titleRenderer(header)}
+                {:else}
+                    {header.title}
+                {/if}
             </div>
         {/each}
     </div>
