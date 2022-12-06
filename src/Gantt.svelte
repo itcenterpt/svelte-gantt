@@ -637,6 +637,20 @@
         taskStore.upsertAll(tasks);
     }
 
+    /**
+     * 
+     * @param model
+     * @param shouldUpdateYPositions
+     * Set this property to true if in updated row model the expanded property is changed
+     */
+     export function updateRowWithChildren(model, shouldUpdateYPositions = false) {
+        const row = rowFactory.createRows([model]);
+        rowStore.upsertAll(row);
+        if (shouldUpdateYPositions) {
+            updateYPositions();
+        }
+    }
+
     export function updateRow(model) {
         const row = rowFactory.createRow(model, null);
         rowStore.upsert(row);
