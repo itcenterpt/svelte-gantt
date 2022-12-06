@@ -60,18 +60,27 @@
 
     function updateYPositions() {
         let y = 0;
+        
+        const rowYPositionTemporary = [];
         $rowStore.ids.forEach(id => {
             const row = $rowStore.entities[id];
             if(!row.hidden) {
-                $rowStore.entities[id].y = y;
+                rowYPositionTemporary.push({id, value: y});
+                // $rowStore.entities[id].y = y;
                 y+= rowHeight;
             }
         });
+        rowStore.updateValue(rowYPositionTemporary, 'y');
+
+        const taskTopPositionTemporary = [];
         $taskStore.ids.forEach(id => {
             const task = $taskStore.entities[id];
             const row = $rowStore.entities[task.model.resourceId];
-            $taskStore.entities[id].top = row.y + rowPadding;
+            taskTopPositionTemporary.push({id, value: row.y + rowPadding});
+            // $taskStore.entities[id].top = row.y + rowPadding;
         });
+
+        taskStore.updateValue(taskTopPositionTemporary, 'top');
     }
 
     export let from;

@@ -17,6 +17,7 @@ export interface EntityStore<T extends EntityType> extends Readable<EntityState<
     add(entity: T): void;
     addAll(entities: T[]): void;
     update(entity: T): void;
+    updateValue(data: {id: number, value:any}[], key: any): void;
     upsert(entity: T): void;
     upsertAll(entities: T[]): void;
     delete(id: number | string): void;
@@ -67,6 +68,14 @@ function createEntityStore<T extends EntityType>(): EntityStore<T> {
                 [item.model.id]: item
             }
         })),
+        updateValue: (data: {id: number, value:any}[], key: any) => update(({ids, entities}) => {
+            data.forEach(item => entities[item.id][key] = item.value);
+
+            return {
+                ids,
+                entities
+            };
+        }),
         upsert: (item: T) => update(({ ids, entities }) => {
             const hasIndex = ids.indexOf(item.model.id) !== -1;
 
