@@ -11,17 +11,25 @@ export class SelectionManager {
         if (!currentSelection.has(taskId)) {
             this.unSelectTasks()
             currentSelection.set(taskId, node);
+            this.markTaskAsSelected();
         }
     }
 
     toggleSelection(taskId, node) {
         currentSelection.set(taskId, node);
+        this.markTaskAsSelected();
     }
 
     unSelectTasks() {
         for (const [taskId, node] of currentSelection.entries()) {
             node?.classList.remove('sg-task-selected');
             currentSelection.delete(taskId);
+        }
+    }
+
+    markTaskAsSelected(){
+        for (const [, node] of currentSelection.entries()) {
+            node?.classList.add('sg-task-selected');
         }
     }
 
