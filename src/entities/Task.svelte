@@ -20,7 +20,7 @@ export class SelectionManager {
 
     unSelectTasks() {
         for (const [taskId, node] of currentSelection.entries()) {
-            node.classList.remove('sg-task-selected');
+            node?.classList.remove('sg-task-selected');
             currentSelection.delete(taskId);
         }
     }
@@ -46,7 +46,7 @@ export class SelectionManager {
         draggableTasks[taskId].onmousedown(event);
 
         for (const [selId, node] of currentSelection.entries()) {
-            node.classList.add('sg-task-selected');
+            node?.classList.add('sg-task-selected');
             if (selId !== taskId) {
                 draggableTasks[selId].direction = draggableTasks[taskId].direction;
                 draggableTasks[selId].resizing = draggableTasks[taskId].resizing; //prvent resizing and draggin at the same time

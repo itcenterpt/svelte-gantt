@@ -579,7 +579,7 @@
     export function selectTask(id) {
         const task = $taskStore.entities[id];
         if (task) {
-            selectionManager.selectSingle(task, document.querySelector(`data-task-id='${id}'`));
+            selectionManager.selectSingle(task, document.querySelector(`[data-task-id='${id}']`));
             api['tasks'].raise.select(task);
         }
     }
