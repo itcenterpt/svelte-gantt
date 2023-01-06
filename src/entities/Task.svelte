@@ -266,6 +266,9 @@ export class SelectionManager {
 
     let row;
     $: row = $rowStore.entities[model.resourceId];
+
+    let labelPosition;
+    $: labelPosition = _position.x < 0 ? Math.abs(_position.x) : 0;
 </script>
 
 <style>
@@ -306,14 +309,21 @@ export class SelectionManager {
 
     .sg-task-content {
         position: absolute;
-        height: 100%;
+        /* height: 100%; */
         top: 0;
 
         padding-left: 14px;
+        padding-right: 14px;
         font-size: 14px;
         display: flex;
         align-items: center;
         justify-content: flex-start;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .sg-task:not(.moving) {
@@ -388,11 +398,12 @@ export class SelectionManager {
   class:animating
   class:sg-task-reflected={reflected}
   class:dragging-enabled={row.model.enableDragging}
+  title={model.label}
   >
   {#if model.amountDone}
   <div class="sg-task-background" style="width:{model.amountDone}%" />
   {/if}
-  <div class="sg-task-content">
+  <div class="sg-task-content" style="width: calc({_position.width}px - {labelPosition}px); {labelPosition > 0 ? `left: ${labelPosition}px;` : ''}">
     {#if model.html}
       {@html model.html}
     {:else if taskContent}
