@@ -576,6 +576,10 @@
         return rowContainer;
     }
 
+    export function getSelectedTasksId() {
+        return selectionManager.getSelectedTasksId();
+    }
+
     export function selectTask(id) {
         const task = $taskStore.entities[id];
         if (task) {

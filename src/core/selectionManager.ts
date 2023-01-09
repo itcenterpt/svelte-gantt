@@ -25,6 +25,10 @@ export class SelectionManager {
         }
     }
 
+    getSelectedTasksId() {
+        return [...currentSelection.keys()];
+    };
+
     dispatchTaskEvent(taskId, event) {
         const x = draggableTasks[taskId].settings.getX();
         const y = draggableTasks[taskId].settings.getY();
