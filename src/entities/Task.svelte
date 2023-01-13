@@ -194,7 +194,9 @@
         function taskElement(node, model) {
             if(node && node.getBoundingClientRect().x == 0 && node.getBoundingClientRect().width == 0){
                 node = <HTMLElement> document.querySelector('[data-task-id="'+node.dataset.taskId+'"]')
-                console.log('NODE AFTER', node, node.getBoundingClientRect())
+                if(node){
+                    console.log('NODE AFTER', node, node.getBoundingClientRect())
+                }
             }
 
             if(taskElementHook) {
