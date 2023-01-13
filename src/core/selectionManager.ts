@@ -12,6 +12,7 @@ export class SelectionManager {
             this.unSelectTasks()
             currentSelection.set(taskId, node);
         }
+        node?.classList.add('sg-task-selected');
     }
 
     toggleSelection(taskId, node) {
@@ -27,6 +28,10 @@ export class SelectionManager {
 
     getSelectedTasksId() {
         return [...currentSelection.keys()];
+    };
+
+    isTaskSelected(taskId) {
+        return currentSelection.has(taskId);
     };
 
     dispatchTaskEvent(taskId, event) {

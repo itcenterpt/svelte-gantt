@@ -38,7 +38,7 @@
         
         const { rowContainer } = getContext('gantt');
         const { taskContent, resizeHandleWidth, rowPadding, onTaskButtonClick, reflectOnParentRows, reflectOnChildRows, taskElementHook } = getContext('options');
-        const { dndManager, api, utils, columnService } = getContext('services');
+        const { selectionManager, dndManager, api, utils, columnService } = getContext('services');
     
         function drag(node) {  
             const ondrop = (event) => {
@@ -215,6 +215,9 @@
 
         let labelPosition;
         $: labelPosition = _position.x < 0 ? Math.abs(_position.x) : 0;
+
+        let isSelected;
+        $: isSelected = selectionManager.isTaskSelected(model.id);
     </script>
     
     <style>
@@ -345,6 +348,7 @@
       class:animating
       class:sg-task-reflected={reflected}
       class:dragging-enabled={row.model.enableDragging && model.enableDragging}
+      class:sg-task-selected={isSelected}
       title={model.label}
       >
       {#if model.amountDone}
