@@ -22,7 +22,8 @@
                 const fromTask = map[dependency.fromId];
                 const toTask = map[dependency.toId];
                 const fromRow = fromTask && mapRow[fromTask.model.resourceId];
-                const canShow = fromRow && fromRow.expanded && fromRow.allParents.every(x => x.expanded);
+                const toRow = toTask && mapRow[toTask.model.resourceId];
+                const canShow = fromRow?.hidden === false && toRow?.hidden === false;
                 if(
                     fromTask && toTask && canShow
                     && Math.min(fromTask.top, toTask.top) <= paddingTop + $visibleHeight 
