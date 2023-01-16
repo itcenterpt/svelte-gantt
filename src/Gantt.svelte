@@ -690,6 +690,10 @@
         return $taskStore.entities[id];
     }
 
+    export function getTaskByModelProperty(propertyName, propertyValue) {
+        return $allTasks.find(x => x.model[propertyName] === propertyValue);
+    }
+
     export function getTasks(resourceId) {
         if ($rowTaskCache[resourceId]) {
             return $rowTaskCache[resourceId].map(id => $taskStore.entities[id]);
