@@ -662,6 +662,10 @@
         return null;
     }
 
+    export function getRows() {
+        return $allRows;
+    }
+
     let filteredRows = [];
     $: filteredRows = $allRows.filter(row => !row.hidden);
 

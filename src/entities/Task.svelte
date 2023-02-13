@@ -33,7 +33,7 @@
     
         unSelectTasks() {
             for (const [, selectedItems] of currentSelection.entries()) {
-                selectedItems.HTMLElement.classList.remove('sg-task-selected');
+                selectedItems.HTMLElement?.classList.remove('sg-task-selected');
             }
             currentSelection.clear();
         }

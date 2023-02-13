@@ -8,7 +8,7 @@
     const dispatch = createEventDispatcher();
 
     import TableRow from './TableRow.svelte';
-    import { rowStore, taskStore } from "../../core/store";
+    import { rowStore, allRows, taskStore } from "../../core/store";
     import type { TableHeader } from './tableHeader';
     import type { SvelteRow } from '../../core/row';
 
@@ -112,17 +112,75 @@
         });
     }
 
+    function collapseAllNodes() {
+        let rowsToUpdate = $allRows.filter(x => x.children?.length > 0 && x.expanded);
+
+        for (const row of rowsToUpdate) {
+            row.expanded = false;
+            if(row.children)
+                hideAllNodes(row.children);
+        }
+  
+          updateYPositions();
+      }
+  
+      function expandAllNodes() {
+        let rowsToUpdate = $allRows.filter(x => x.children?.length > 0 && !x.expanded);
+
+        for (const row of rowsToUpdate) {
+            row.expanded = true;
+            if(row.children)
+                showAllNodes(row.children);
+        }
+  
+          updateYPositions();
+      }
+  
+      function hideAllNodes(children) {
+          children.forEach(row => {
+              row.expanded = false;
+              row.hidden = true;
+              if(row.children)
+                  hide(row.children);
+          });
+      }
+  
+      function showAllNodes(children) {
+          children.forEach(row => {
+              row.expanded = true;
+              row.hidden = false;
+              if(row.children)
+                  show(row.children, !row.expanded);
+          });
+      }
+
     // if gantt displays a bottom scrollbar and table does not, we need to pad out the table
     let bottomScrollbarVisible;
     $: {
         bottomScrollbarVisible = $width > $visibleWidth && scrollWidth <= tableWidth;
     } 
+
+    let hasAnyRowWithChildren;
+    let allRowsAreExpanded;
+    $: {
+        hasAnyRowWithChildren = $allRows.find((x) => x.children?.length > 0) !== undefined;
+        allRowsAreExpanded = hasAnyRowWithChildren && $allRows.find((x) => x.children?.length > 0 && !x.expanded) === undefined;
+    }
 </script>
 
 <div class="sg-table sg-view" style="width:{tableWidth}px;">
     <div class="sg-table-header" style="height:{$headerHeight}px" bind:this={headerContainer}>
         {#each tableHeaders as header}
             <div class="sg-table-header-cell sg-table-cell" style="width:{header.width}px">
+                {#if header.type === 'tree' && hasAnyRowWithChildren && header.indicationOfAllRowsActionEnable}
+                    <div class="sg-tree-expander" on:click={() => allRowsAreExpanded ? collapseAllNodes() : expandAllNodes()}>
+                        {#if allRowsAreExpanded}
+                            <i class="fas fa-angle-down" />
+                        {:else}
+                            <i class="fas fa-angle-right" />
+                        {/if}
+                    </div>
+                {/if}
                 {#if header.titleRenderer}
                     {@html header.titleRenderer(header)}
                 {:else}
@@ -203,5 +261,16 @@
     
     :global(.sg-table-cell:last-child) {
         flex-grow: 1;
+    }
+
+    .sg-tree-expander {
+      cursor: pointer;
+      min-width: 1.4em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      border: none;
+      padding: 0;
     }
 </style>
