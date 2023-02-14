@@ -81,7 +81,7 @@ export class RowFactory {
             row.childLevel = level;
             row.parent = parent;
             row.allParents = parents;
-            row.hidden = !parent?.expanded && level > 0;
+            row.hidden = parents?.some(x => !x.expanded) && level > 0;
             
             ctx.y += row.height;
 
